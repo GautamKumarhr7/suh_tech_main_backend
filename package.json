@@ -1,0 +1,36 @@
+{
+  "name": "suh-backend",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/index.js",
+    "dev": "nodemon --watch src --ext ts --exec \"node --loader ts-node/esm ./src/index.ts\"",
+    "db:check": "node scripts/check-db-connection.js",
+    "db:seed": "node scripts/seed.js",
+    "db:setup": "npm run migrate:up && npm run db:seed",
+    "migrate:up": "node scripts/migrate-safe.js up",
+    "migrate:down": "node scripts/migrate-safe.js down",
+    "migrate:create": "node-pg-migrate create",
+    "migrate:up:direct": "node-pg-migrate up",
+    "migrate:down:direct": "node-pg-migrate down"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.10.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.2.5",
+    "@types/pg": "^8.16.0",
+    "node-pg-migrate": "^7.0.0",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.0"
+  }
+}

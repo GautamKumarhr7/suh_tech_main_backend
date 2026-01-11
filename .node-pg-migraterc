@@ -1,0 +1,13 @@
+{
+  "database-url-var": "DATABASE_URL",
+  "migrations-dir": "migrations",
+  "dir": "migrations",
+  "migration-file-language": "js",
+  "migration-filename-format": "timestamp",
+  "migrations-table": "pgmigrations",
+  "check-order": true,
+  "ignore-pattern": "^\\..*|.*README.*|.*\\.md$",
+  "ssl": {
+    "rejectUnauthorized": false
+  }
+}
