@@ -33,11 +33,9 @@ export class UserService {
     email: string;
     firstName: string;
     lastName: string;
-    password: string;
     phoneNumber?: string;
     address?: string;
     admin?: boolean;
-    empId?: string;
     departmentId?: number;
     designationId?: number;
     joinedDate?: Date;
@@ -49,11 +47,10 @@ export class UserService {
     if (
       !userData.email ||
       !userData.firstName ||
-      !userData.lastName ||
-      !userData.password
+      !userData.lastName
     ) {
       throw new Error(
-        "Email, first name, last name, and password are required"
+        "Email, first name, and last name are required"
       );
     }
 
@@ -62,11 +59,7 @@ export class UserService {
     if (!emailRegex.test(userData.email)) {
       throw new Error("Invalid email format");
     }
-
-    // Validate password length
-    if (userData.password.length < 6) {
-      throw new Error("Password must be at least 6 characters long");
-    }
+    const password=userData.firstName.toLowerCase()+"@123"
 
     // Validate empType if provided
     const validEmpTypes = ["full-time", "part-time", "contract", "intern"];
@@ -75,23 +68,10 @@ export class UserService {
         "Invalid employee type. Must be: full-time, part-time, contract, or intern"
       );
     }
-
-    // Check if email already exists
-    const emailExists = await userRepository.emailExists(userData.email);
-    if (emailExists) {
-      throw new Error("User with this email already exists");
-    }
-
-    // Check if empId already exists (if provided)
-    if (userData.empId) {
-      const empIdExists = await userRepository.empIdExists(userData.empId);
-      if (empIdExists) {
-        throw new Error("Employee ID already exists");
-      }
-    }
+    const empId="EMP-"+Math.floor(1000 + Math.random() * 9000)
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const user = await userRepository.create({

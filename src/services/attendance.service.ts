@@ -80,15 +80,6 @@ export class AttendanceService {
       throw new Error("User ID, date, and status are required");
     }
 
-    // Validate status
-    const validStatuses = ["present", "absent", "leave", "holiday"];
-    if (!validStatuses.includes(attendanceData.status)) {
-      throw new Error(
-        "Invalid status. Must be: present, absent, leave, or holiday"
-      );
-    }
-
-    // Verify user exists
     const user = await userRepository.findById(attendanceData.userId);
     if (!user) {
       throw new Error("User not found");

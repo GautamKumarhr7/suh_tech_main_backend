@@ -4,7 +4,6 @@
  */
 
 export type EmpType = "full-time" | "part-time" | "contract" | "intern";
-export type AttendanceStatus = "present" | "absent" | "leave" | "holiday";
 
 // Departments table
 export interface Department {
@@ -35,7 +34,7 @@ export interface User {
   password: string;
   address: string | null;
   admin: boolean;
-  emp_id: string | null;
+  emp_id: string;
   phone_number: string | null;
   designation_id: number | null;
   department_id: number | null;
@@ -53,7 +52,8 @@ export interface Attendance {
   id: number;
   user_id: number;
   date: Date;
-  status: AttendanceStatus;
+  marked_By: number;
+  status: boolean;
   created_at: Date;
   updated_at: Date;
 }

@@ -63,7 +63,8 @@ export class AttendanceController {
       const attendanceData = {
         userId: req.body.userId,
         date: req.body.date ? new Date(req.body.date) : new Date(),
-        status: req.body.status || "present",
+        status: req.body.status,
+        marked_By: req.body.marked_By,
       };
 
       const attendance = await attendanceService.createAttendance(

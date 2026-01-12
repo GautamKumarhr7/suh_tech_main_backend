@@ -6,6 +6,8 @@ import { pool } from "./db/dbConnection.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/users.routes.js";
 import attendanceRoutes from "./routes/attendance.routes.js";
+import departmentRoutes from "./routes/department.routes.js";
+import designationRoutes from "./routes/designation.routes.js";
 
 const app = express();
 app.use(express.json());
@@ -16,9 +18,11 @@ app.get("/health", (req, res) => {
 });
 
 // API Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/attendances", attendanceRoutes);
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
+app.use("/attendances", attendanceRoutes);
+app.use("/departments", departmentRoutes);
+app.use("/designations", designationRoutes);
 
 // 404 handler
 app.use((req, res) => {

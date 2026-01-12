@@ -171,10 +171,15 @@ exports.up = async function up(pgm) {
       notNull: true,
     },
     status: {
-      type: "varchar(50)",
-      enum: ["present", "absent", "leave", "holiday"],
+      type: "boolean",
       notNull: true,
-      default: "present",
+      default: true,
+    },
+    marked_By: {
+      type: "integer",
+      notNull: true,
+      references: "users",
+      onDelete: "CASCADE",
     },
     created_at: {
       type: "timestamp",
