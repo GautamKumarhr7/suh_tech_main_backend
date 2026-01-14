@@ -19,7 +19,7 @@ app.get("/health", (req, res) => {
 
 // API Routes
 app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
+app.use("/employee", userRoutes);
 app.use("/attendances", attendanceRoutes);
 app.use("/departments", departmentRoutes);
 app.use("/designations", designationRoutes);
