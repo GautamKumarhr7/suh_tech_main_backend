@@ -4,7 +4,7 @@
  */
 
 import { pool } from "../db/dbConnection.js";
-import { User } from "../db/schema.js";
+import { User } from "../db/types.js";
 
 export class UserRepository {
   /**

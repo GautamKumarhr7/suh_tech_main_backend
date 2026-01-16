@@ -4,7 +4,7 @@
  */
 
 import { pool } from "../db/dbConnection.js";
-import { Department } from "../db/schema.js";
+import { Department } from "../db/types.js";
 
 export class DepartmentRepository {
   /**

@@ -64,7 +64,8 @@ export class AttendanceController {
         userId: req.body.userId,
         date: req.body.date ? new Date(req.body.date) : new Date(),
         status: req.body.status,
-        marked_By: req.body.marked_By,
+        clockIn: req.body.clockIn ? new Date(req.body.clockIn) : undefined,
+        clockOut: req.body.clockOut ? new Date(req.body.clockOut) : undefined,
       };
 
       const attendance = await attendanceService.createAttendance(
@@ -216,6 +217,14 @@ export class AttendanceController {
 
       if (req.body.date) {
         updateData.date = new Date(req.body.date);
+      }
+
+      if (req.body.clockIn) {
+        updateData.clockIn = new Date(req.body.clockIn);
+      }
+
+      if (req.body.clockOut) {
+        updateData.clockOut = new Date(req.body.clockOut);
       }
 
       const attendance = await attendanceService.updateAttendance(

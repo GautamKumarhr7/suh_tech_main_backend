@@ -4,7 +4,7 @@
  */
 
 import { pool } from "../db/dbConnection.js";
-import { Designation } from "../db/schema.js";
+import { Designation } from "../db/types.js";
 
 export class DesignationRepository {
   /**

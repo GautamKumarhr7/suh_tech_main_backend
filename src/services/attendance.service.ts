@@ -18,10 +18,10 @@ export class AttendanceService {
   }) {
     // Validate status if provided
     if (filters?.status) {
-      const validStatuses = ["present", "absent", "leave", "holiday"];
+      const validStatuses = ["absent", "present", "on leave", "late"];
       if (!validStatuses.includes(filters.status)) {
         throw new Error(
-          "Invalid status. Must be: present, absent, leave, or holiday"
+          "Invalid status. Must be: absent, present, on leave, or late"
         );
       }
     }
@@ -70,6 +70,8 @@ export class AttendanceService {
     userId: number;
     date: Date;
     status: string;
+    clockIn?: Date;
+    clockOut?: Date;
   }) {
     // Validate required fields
     if (
@@ -78,6 +80,14 @@ export class AttendanceService {
       !attendanceData.status
     ) {
       throw new Error("User ID, date, and status are required");
+    }
+
+    // Validate status
+    const validStatuses = ["absent", "present", "on leave", "late"];
+    if (!validStatuses.includes(attendanceData.status)) {
+      throw new Error(
+        "Invalid status. Must be: absent, present, on leave, or late"
+      );
     }
 
     const user = await userRepository.findById(attendanceData.userId);
@@ -104,7 +114,12 @@ export class AttendanceService {
    */
   async updateAttendance(
     id: number,
-    updateData: { status?: string; date?: Date }
+    updateData: {
+      status?: string;
+      date?: Date;
+      clockIn?: Date;
+      clockOut?: Date;
+    }
   ) {
     const attendance = await attendanceRepository.findById(id);
     if (!attendance) {
@@ -113,10 +128,10 @@ export class AttendanceService {
 
     // Validate status if provided
     if (updateData.status) {
-      const validStatuses = ["present", "absent", "leave", "holiday"];
+      const validStatuses = ["absent", "present", "on leave", "late"];
       if (!validStatuses.includes(updateData.status)) {
         throw new Error(
-          "Invalid status. Must be: present, absent, leave, or holiday"
+          "Invalid status. Must be: absent, present, on leave, or late"
         );
       }
     }
@@ -177,10 +192,10 @@ export class AttendanceService {
     // Format statistics
     const formattedStats: any = {
       userId,
-      present: 0,
       absent: 0,
-      leave: 0,
-      holiday: 0,
+      present: 0,
+      "on leave": 0,
+      late: 0,
       total: 0,
     };
 
@@ -201,6 +216,8 @@ export class AttendanceService {
       userId: attendance.user_id,
       date: attendance.date,
       status: attendance.status,
+      clockIn: attendance.clock_in,
+      clockOut: attendance.clock_out,
       createdAt: attendance.created_at,
       updatedAt: attendance.updated_at,
     };
