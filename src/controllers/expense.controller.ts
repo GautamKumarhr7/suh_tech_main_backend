@@ -53,7 +53,10 @@ export class ExpenseController {
   async getEmployeeExpenseById(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const expense = await expenseService.getExpenseById(parseInt(id), "employee");
+      const expense = await expenseService.getExpenseById(
+        parseInt(id),
+        "employee"
+      );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
       if (error.message.includes("not found")) {
@@ -71,7 +74,10 @@ export class ExpenseController {
   async getClientExpenseById(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const expense = await expenseService.getExpenseById(parseInt(id), "client");
+      const expense = await expenseService.getExpenseById(
+        parseInt(id),
+        "client"
+      );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
       if (error.message.includes("not found")) {
@@ -89,7 +95,10 @@ export class ExpenseController {
   async getPersonalExpenseById(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const expense = await expenseService.getExpenseById(parseInt(id), "personal");
+      const expense = await expenseService.getExpenseById(
+        parseInt(id),
+        "personal"
+      );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
       if (error.message.includes("not found")) {
@@ -112,14 +121,26 @@ export class ExpenseController {
         phone: req.body.phone,
         status: req.body.status,
         role: req.body.role,
-        department: req.body.department ? parseInt(req.body.department) : undefined,
+        department: req.body.department
+          ? parseInt(req.body.department)
+          : undefined,
         paymentMode: req.body.paymentMode,
-        basicSalary: req.body.basicSalary ? parseFloat(req.body.basicSalary) : undefined,
+        basicSalary: req.body.basicSalary
+          ? parseFloat(req.body.basicSalary)
+          : undefined,
         hra: req.body.hra ? parseFloat(req.body.hra) : undefined,
-        conveyance: req.body.conveyance ? parseFloat(req.body.conveyance) : undefined,
-        specialAllowance: req.body.specialAllowance ? parseFloat(req.body.specialAllowance) : undefined,
-        pfDeductions: req.body.pfDeductions ? parseFloat(req.body.pfDeductions) : undefined,
-        taxDeductions: req.body.taxDeductions ? parseFloat(req.body.taxDeductions) : undefined,
+        conveyance: req.body.conveyance
+          ? parseFloat(req.body.conveyance)
+          : undefined,
+        specialAllowance: req.body.specialAllowance
+          ? parseFloat(req.body.specialAllowance)
+          : undefined,
+        pfDeductions: req.body.pfDeductions
+          ? parseFloat(req.body.pfDeductions)
+          : undefined,
+        taxDeductions: req.body.taxDeductions
+          ? parseFloat(req.body.taxDeductions)
+          : undefined,
         date: new Date(req.body.date),
         createdBy: (req as any).user.userId,
       };
@@ -127,7 +148,11 @@ export class ExpenseController {
       const expense = await expenseService.createEmployeeExpense(expenseData);
       res.status(201).json({ success: true, data: expense });
     } catch (error: any) {
-      if (error.message.includes("required") || error.message.includes("not found") || error.message.includes("Invalid")) {
+      if (
+        error.message.includes("required") ||
+        error.message.includes("not found") ||
+        error.message.includes("Invalid")
+      ) {
         res.status(400).json({ success: false, message: error.message });
       } else {
         res.status(500).json({ success: false, message: error.message });
@@ -156,7 +181,11 @@ export class ExpenseController {
       const expense = await expenseService.createClientExpense(expenseData);
       res.status(201).json({ success: true, data: expense });
     } catch (error: any) {
-      if (error.message.includes("required") || error.message.includes("not found") || error.message.includes("Invalid")) {
+      if (
+        error.message.includes("required") ||
+        error.message.includes("not found") ||
+        error.message.includes("Invalid")
+      ) {
         res.status(400).json({ success: false, message: error.message });
       } else {
         res.status(500).json({ success: false, message: error.message });
@@ -183,7 +212,11 @@ export class ExpenseController {
       const expense = await expenseService.createPersonalExpense(expenseData);
       res.status(201).json({ success: true, data: expense });
     } catch (error: any) {
-      if (error.message.includes("required") || error.message.includes("not found") || error.message.includes("Invalid")) {
+      if (
+        error.message.includes("required") ||
+        error.message.includes("not found") ||
+        error.message.includes("Invalid")
+      ) {
         res.status(400).json({ success: false, message: error.message });
       } else {
         res.status(500).json({ success: false, message: error.message });
@@ -200,21 +233,32 @@ export class ExpenseController {
       const { id } = req.params;
       const updateData: any = {};
 
-      if (req.body.amount !== undefined) updateData.amount = parseFloat(req.body.amount);
+      if (req.body.amount !== undefined)
+        updateData.amount = parseFloat(req.body.amount);
       if (req.body.phone !== undefined) updateData.phone = req.body.phone;
       if (req.body.status) updateData.status = req.body.status;
       if (req.body.role !== undefined) updateData.role = req.body.role;
-      if (req.body.department !== undefined) updateData.department = parseInt(req.body.department);
-      if (req.body.paymentMode !== undefined) updateData.paymentMode = req.body.paymentMode;
-      if (req.body.basicSalary !== undefined) updateData.basicSalary = parseFloat(req.body.basicSalary);
+      if (req.body.department !== undefined)
+        updateData.department = parseInt(req.body.department);
+      if (req.body.paymentMode !== undefined)
+        updateData.paymentMode = req.body.paymentMode;
+      if (req.body.basicSalary !== undefined)
+        updateData.basicSalary = parseFloat(req.body.basicSalary);
       if (req.body.hra !== undefined) updateData.hra = parseFloat(req.body.hra);
-      if (req.body.conveyance !== undefined) updateData.conveyance = parseFloat(req.body.conveyance);
-      if (req.body.specialAllowance !== undefined) updateData.specialAllowance = parseFloat(req.body.specialAllowance);
-      if (req.body.pfDeductions !== undefined) updateData.pfDeductions = parseFloat(req.body.pfDeductions);
-      if (req.body.taxDeductions !== undefined) updateData.taxDeductions = parseFloat(req.body.taxDeductions);
+      if (req.body.conveyance !== undefined)
+        updateData.conveyance = parseFloat(req.body.conveyance);
+      if (req.body.specialAllowance !== undefined)
+        updateData.specialAllowance = parseFloat(req.body.specialAllowance);
+      if (req.body.pfDeductions !== undefined)
+        updateData.pfDeductions = parseFloat(req.body.pfDeductions);
+      if (req.body.taxDeductions !== undefined)
+        updateData.taxDeductions = parseFloat(req.body.taxDeductions);
       if (req.body.date) updateData.date = new Date(req.body.date);
 
-      const expense = await expenseService.updateEmployeeExpense(parseInt(id), updateData);
+      const expense = await expenseService.updateEmployeeExpense(
+        parseInt(id),
+        updateData
+      );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
       if (error.message.includes("not found")) {
@@ -237,15 +281,21 @@ export class ExpenseController {
       const updateData: any = {};
 
       if (req.body.clientName) updateData.clientName = req.body.clientName;
-      if (req.body.projectName !== undefined) updateData.projectName = req.body.projectName;
-      if (req.body.amount !== undefined) updateData.amount = parseFloat(req.body.amount);
+      if (req.body.projectName !== undefined)
+        updateData.projectName = req.body.projectName;
+      if (req.body.amount !== undefined)
+        updateData.amount = parseFloat(req.body.amount);
       if (req.body.email !== undefined) updateData.email = req.body.email;
       if (req.body.phone !== undefined) updateData.phone = req.body.phone;
       if (req.body.status) updateData.status = req.body.status;
-      if (req.body.paymentMode !== undefined) updateData.paymentMode = req.body.paymentMode;
+      if (req.body.paymentMode !== undefined)
+        updateData.paymentMode = req.body.paymentMode;
       if (req.body.date) updateData.date = new Date(req.body.date);
 
-      const expense = await expenseService.updateClientExpense(parseInt(id), updateData);
+      const expense = await expenseService.updateClientExpense(
+        parseInt(id),
+        updateData
+      );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
       if (error.message.includes("not found")) {
@@ -268,13 +318,19 @@ export class ExpenseController {
       const updateData: any = {};
 
       if (req.body.expenseName) updateData.expenseName = req.body.expenseName;
-      if (req.body.amount !== undefined) updateData.amount = parseFloat(req.body.amount);
+      if (req.body.amount !== undefined)
+        updateData.amount = parseFloat(req.body.amount);
       if (req.body.status) updateData.status = req.body.status;
-      if (req.body.category !== undefined) updateData.category = req.body.category;
-      if (req.body.paymentMode !== undefined) updateData.paymentMode = req.body.paymentMode;
+      if (req.body.category !== undefined)
+        updateData.category = req.body.category;
+      if (req.body.paymentMode !== undefined)
+        updateData.paymentMode = req.body.paymentMode;
       if (req.body.date) updateData.date = new Date(req.body.date);
 
-      const expense = await expenseService.updatePersonalExpense(parseInt(id), updateData);
+      const expense = await expenseService.updatePersonalExpense(
+        parseInt(id),
+        updateData
+      );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
       if (error.message.includes("not found")) {
@@ -294,7 +350,10 @@ export class ExpenseController {
   async deleteEmployeeExpense(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const result = await expenseService.deleteExpense(parseInt(id), "employee");
+      const result = await expenseService.deleteExpense(
+        parseInt(id),
+        "employee"
+      );
       res.status(200).json(result);
     } catch (error: any) {
       if (error.message.includes("not found")) {
@@ -330,7 +389,10 @@ export class ExpenseController {
   async deletePersonalExpense(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const result = await expenseService.deleteExpense(parseInt(id), "personal");
+      const result = await expenseService.deleteExpense(
+        parseInt(id),
+        "personal"
+      );
       res.status(200).json(result);
     } catch (error: any) {
       if (error.message.includes("not found")) {
@@ -340,7 +402,6 @@ export class ExpenseController {
       }
     }
   }
-
 }
 
 export const expenseController = new ExpenseController();

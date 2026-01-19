@@ -23,7 +23,9 @@ export class OrganizationController {
         filters.purchasePlain = req.query.purchasePlain as string;
       }
 
-      const organizations = await organizationService.getAllOrganizations(filters);
+      const organizations = await organizationService.getAllOrganizations(
+        filters
+      );
 
       res.json({
         success: true,
@@ -94,7 +96,9 @@ export class OrganizationController {
         createdBy: req.body.createdBy || (req as any).user?.id,
       };
 
-      const organization = await organizationService.createOrganization(orgData);
+      const organization = await organizationService.createOrganization(
+        orgData
+      );
 
       res.status(201).json({
         success: true,
@@ -144,10 +148,12 @@ export class OrganizationController {
       if (req.body.address !== undefined) updateData.address = req.body.address;
       if (req.body.email) updateData.email = req.body.email;
       if (req.body.phone !== undefined) updateData.phone = req.body.phone;
-      if (req.body.purchasePlain) updateData.purchasePlain = req.body.purchasePlain;
+      if (req.body.purchasePlain)
+        updateData.purchasePlain = req.body.purchasePlain;
       if (req.body.modules !== undefined) updateData.modules = req.body.modules;
       if (req.body.status) updateData.status = req.body.status;
-      if (req.body.loginStatus !== undefined) updateData.loginStatus = req.body.loginStatus;
+      if (req.body.loginStatus !== undefined)
+        updateData.loginStatus = req.body.loginStatus;
 
       const organization = await organizationService.updateOrganization(
         orgId,

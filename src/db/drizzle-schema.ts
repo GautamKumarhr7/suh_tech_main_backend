@@ -3,7 +3,17 @@
  * Database schema definitions using Drizzle ORM
  */
 
-import { pgTable, serial, varchar, text, boolean, timestamp, integer, decimal, date } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  varchar,
+  text,
+  boolean,
+  timestamp,
+  integer,
+  decimal,
+  date,
+} from "drizzle-orm/pg-core";
 
 // Departments table
 export const departments = pgTable("departments", {
@@ -36,8 +46,12 @@ export const users = pgTable("users", {
   admin: boolean("admin").default(false).notNull(),
   empId: varchar("emp_id", { length: 100 }).unique(),
   phoneNumber: varchar("phone_number", { length: 20 }),
-  designationId: integer("designation_id").references(() => designations.id, { onDelete: "set null" }),
-  departmentId: integer("department_id").references(() => departments.id, { onDelete: "set null" }),
+  designationId: integer("designation_id").references(() => designations.id, {
+    onDelete: "set null",
+  }),
+  departmentId: integer("department_id").references(() => departments.id, {
+    onDelete: "set null",
+  }),
   joinedDate: date("joined_date"),
   skills: text("skills"),
   active: boolean("active").default(true).notNull(),
@@ -73,11 +87,15 @@ export const organizations = pgTable("organizations", {
   address: text("address"),
   email: varchar("email", { length: 255 }).notNull(),
   phone: varchar("phone", { length: 20 }),
-  purchasePlain: varchar("purchase_plain", { length: 50 }).default("basic").notNull(),
+  purchasePlain: varchar("purchase_plain", { length: 50 })
+    .default("basic")
+    .notNull(),
   modules: text("modules"),
   status: varchar("status", { length: 50 }).default("pending").notNull(),
   loginStatus: boolean("login_status").default(false).notNull(),
-  createdBy: integer("created_by").references(() => users.id, { onDelete: "set null" }).notNull(),
+  createdBy: integer("created_by")
+    .references(() => users.id, { onDelete: "set null" })
+    .notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
   isDeleted: boolean("is_deleted").default(false).notNull(),
@@ -86,12 +104,16 @@ export const organizations = pgTable("organizations", {
 // Employee Expenses table
 export const employeeExpenses = pgTable("employee_expenses", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  userId: integer("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   amount: decimal("amount", { precision: 15, scale: 2 }).notNull(),
   phone: varchar("phone", { length: 20 }),
   status: varchar("status", { length: 50 }).default("pending").notNull(),
   role: varchar("role", { length: 255 }),
-  department: integer("department").references(() => departments.id, { onDelete: "set null" }),
+  department: integer("department").references(() => departments.id, {
+    onDelete: "set null",
+  }),
   paymentMode: varchar("payment_mode", { length: 50 }),
   basicSalary: decimal("basic_salary", { precision: 15, scale: 2 }),
   hra: decimal("hra", { precision: 15, scale: 2 }),
@@ -102,7 +124,9 @@ export const employeeExpenses = pgTable("employee_expenses", {
   date: date("date").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  createdBy: integer("created_by").references(() => users.id, { onDelete: "set null" }).notNull(),
+  createdBy: integer("created_by")
+    .references(() => users.id, { onDelete: "set null" })
+    .notNull(),
 });
 
 // Company Client Expenses table
@@ -118,7 +142,9 @@ export const companyClientExpenses = pgTable("company_client_expenses", {
   date: date("date").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  createdBy: integer("created_by").references(() => users.id, { onDelete: "set null" }).notNull(),
+  createdBy: integer("created_by")
+    .references(() => users.id, { onDelete: "set null" })
+    .notNull(),
 });
 
 // Company Personal Expenses table
@@ -132,16 +158,22 @@ export const companyPersonalExpenses = pgTable("company_personal_expenses", {
   date: date("date").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  createdBy: integer("created_by").references(() => users.id, { onDelete: "set null" }).notNull(),
+  createdBy: integer("created_by")
+    .references(() => users.id, { onDelete: "set null" })
+    .notNull(),
 });
 
 // Attendances table
 export const attendances = pgTable("attendances", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  userId: integer("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   date: date("date").notNull(),
   status: varchar("status", { length: 50 }).default("present").notNull(),
-  markedBy: integer("marked_by").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  markedBy: integer("marked_by")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   clockIn: timestamp("clock_in"),
   clockOut: timestamp("clock_out"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

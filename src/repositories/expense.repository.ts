@@ -4,7 +4,13 @@
  */
 
 import { db } from "../db/drizzle.js";
-import { employeeExpenses, companyClientExpenses, companyPersonalExpenses, users, departments } from "../db/drizzle-schema.js";
+import {
+  employeeExpenses,
+  companyClientExpenses,
+  companyPersonalExpenses,
+  users,
+  departments,
+} from "../db/drizzle-schema.js";
 import { eq } from "drizzle-orm";
 
 export type ExpenseType = "employee" | "client" | "personal";
@@ -51,18 +57,14 @@ export class ExpenseRepository {
    * Get all client expenses
    */
   async findClientExpenses() {
-    return await db
-      .select()
-      .from(companyClientExpenses);
+    return await db.select().from(companyClientExpenses);
   }
 
   /**
    * Get all personal expenses
    */
   async findPersonalExpenses() {
-    return await db
-      .select()
-      .from(companyPersonalExpenses);
+    return await db.select().from(companyPersonalExpenses);
   }
 
   /**
@@ -136,10 +138,7 @@ export class ExpenseRepository {
     date: string;
     createdBy: number;
   }) {
-    const result = await db
-      .insert(employeeExpenses)
-      .values(data)
-      .returning();
+    const result = await db.insert(employeeExpenses).values(data).returning();
     return result[0];
   }
 
@@ -186,21 +185,24 @@ export class ExpenseRepository {
   /**
    * Update employee expense
    */
-  async updateEmployeeExpense(id: number, data: Partial<{
-    amount: string;
-    phone: string;
-    status: string;
-    role: string;
-    department: number;
-    paymentMode: string;
-    basicSalary: string;
-    hra: string;
-    conveyance: string;
-    specialAllowance: string;
-    pfDeductions: string;
-    taxDeductions: string;
-    date: string;
-  }>) {
+  async updateEmployeeExpense(
+    id: number,
+    data: Partial<{
+      amount: string;
+      phone: string;
+      status: string;
+      role: string;
+      department: number;
+      paymentMode: string;
+      basicSalary: string;
+      hra: string;
+      conveyance: string;
+      specialAllowance: string;
+      pfDeductions: string;
+      taxDeductions: string;
+      date: string;
+    }>
+  ) {
     const result = await db
       .update(employeeExpenses)
       .set({ ...data, updatedAt: new Date() })
@@ -212,16 +214,19 @@ export class ExpenseRepository {
   /**
    * Update client expense
    */
-  async updateClientExpense(id: number, data: Partial<{
-    clientName: string;
-    projectName: string;
-    amount: string;
-    email: string;
-    phone: string;
-    status: string;
-    paymentMode: string;
-    date: string;
-  }>) {
+  async updateClientExpense(
+    id: number,
+    data: Partial<{
+      clientName: string;
+      projectName: string;
+      amount: string;
+      email: string;
+      phone: string;
+      status: string;
+      paymentMode: string;
+      date: string;
+    }>
+  ) {
     const result = await db
       .update(companyClientExpenses)
       .set({ ...data, updatedAt: new Date() })
@@ -233,14 +238,17 @@ export class ExpenseRepository {
   /**
    * Update personal expense
    */
-  async updatePersonalExpense(id: number, data: Partial<{
-    expenseName: string;
-    amount: string;
-    status: string;
-    category: string;
-    paymentMode: string;
-    date: string;
-  }>) {
+  async updatePersonalExpense(
+    id: number,
+    data: Partial<{
+      expenseName: string;
+      amount: string;
+      status: string;
+      category: string;
+      paymentMode: string;
+      date: string;
+    }>
+  ) {
     const result = await db
       .update(companyPersonalExpenses)
       .set({ ...data, updatedAt: new Date() })

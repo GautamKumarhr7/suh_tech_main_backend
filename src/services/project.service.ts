@@ -47,14 +47,26 @@ export class ProjectService {
     technologyStack?: string;
   }) {
     // Validate required fields
-    if (!projectData.projectName || !projectData.clientName || !projectData.startDate) {
+    if (
+      !projectData.projectName ||
+      !projectData.clientName ||
+      !projectData.startDate
+    ) {
       throw new Error("Project name, client name, and start date are required");
     }
 
     // Validate status
-    const validStatuses = ["pending", "in progress", "completed", "on hold", "cancelled"];
+    const validStatuses = [
+      "pending",
+      "in progress",
+      "completed",
+      "on hold",
+      "cancelled",
+    ];
     if (projectData.status && !validStatuses.includes(projectData.status)) {
-      throw new Error(`Invalid status. Must be one of: ${validStatuses.join(", ")}`);
+      throw new Error(
+        `Invalid status. Must be one of: ${validStatuses.join(", ")}`
+      );
     }
 
     const project = await projectRepository.create(projectData);
@@ -87,9 +99,17 @@ export class ProjectService {
 
     // Validate status if provided
     if (updateData.status) {
-      const validStatuses = ["pending", "in progress", "completed", "on hold", "cancelled"];
+      const validStatuses = [
+        "pending",
+        "in progress",
+        "completed",
+        "on hold",
+        "cancelled",
+      ];
       if (!validStatuses.includes(updateData.status)) {
-        throw new Error(`Invalid status. Must be one of: ${validStatuses.join(", ")}`);
+        throw new Error(
+          `Invalid status. Must be one of: ${validStatuses.join(", ")}`
+        );
       }
     }
 

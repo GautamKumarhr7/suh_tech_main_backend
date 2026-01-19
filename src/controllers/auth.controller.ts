@@ -140,6 +140,27 @@ export class AuthController {
       });
     }
   }
+
+  /**
+   * POST /api/auth/logout
+   * Logout user
+   */
+  async logout(req: Request, res: Response) {
+    try {
+      // Since we're using JWT, logout is handled client-side by removing the token
+      // This endpoint can be used for logging, session cleanup, or token blacklisting if needed
+      res.json({
+        success: true,
+        message: "Logged out successfully",
+      });
+    } catch (error: any) {
+      console.error("Logout error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Logout failed. Please try again.",
+      });
+    }
+  }
 }
 
 export const authController = new AuthController();

@@ -68,9 +68,8 @@ export class AttendanceController {
         clockOut: req.body.clockOut ? new Date(req.body.clockOut) : undefined,
       };
 
-      const attendance = await attendanceService.createAttendance(
-        attendanceData
-      );
+      const attendance =
+        await attendanceService.createAttendance(attendanceData);
 
       res.status(201).json({
         success: true,
@@ -120,9 +119,8 @@ export class AttendanceController {
         });
       }
 
-      const attendance = await attendanceService.getAttendanceById(
-        attendanceId
-      );
+      const attendance =
+        await attendanceService.getAttendanceById(attendanceId);
 
       res.json({
         success: true,
@@ -170,7 +168,7 @@ export class AttendanceController {
       const attendances = await attendanceService.getUserAttendances(
         userId,
         startDate,
-        endDate
+        endDate,
       );
 
       res.json({
@@ -219,17 +217,27 @@ export class AttendanceController {
         updateData.date = new Date(req.body.date);
       }
 
-      if (req.body.clockIn) {
-        updateData.clockIn = new Date(req.body.clockIn);
+      if (req.body.clockIn !== undefined) {
+        // If clockIn is true or "now", use current timestamp
+        if (req.body.clockIn === true || req.body.clockIn === "now") {
+          updateData.clockIn = new Date();
+        } else {
+          updateData.clockIn = new Date(req.body.clockIn);
+        }
       }
 
-      if (req.body.clockOut) {
-        updateData.clockOut = new Date(req.body.clockOut);
+      if (req.body.clockOut !== undefined) {
+        // If clockOut is true or "now", use current timestamp
+        if (req.body.clockOut === true || req.body.clockOut === "now") {
+          updateData.clockOut = new Date();
+        } else {
+          updateData.clockOut = new Date(req.body.clockOut);
+        }
       }
 
       const attendance = await attendanceService.updateAttendance(
         attendanceId,
-        updateData
+        updateData,
       );
 
       res.json({
@@ -327,7 +335,7 @@ export class AttendanceController {
       const stats = await attendanceService.getAttendanceStats(
         userId,
         startDate,
-        endDate
+        endDate,
       );
 
       res.json({

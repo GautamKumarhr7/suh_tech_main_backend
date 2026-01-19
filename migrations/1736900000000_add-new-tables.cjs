@@ -358,7 +358,7 @@ exports.down = async function down(pgm) {
   pgm.dropTable("employee_expenses");
   pgm.dropTable("projects");
   pgm.dropTable("organizations");
-  
+
   // Revert attendances changes
   pgm.dropColumns("attendances", ["clock_in", "clock_out"]);
   pgm.alterColumn("attendances", "status", {

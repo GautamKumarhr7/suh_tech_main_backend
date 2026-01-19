@@ -10,7 +10,10 @@ export class OrganizationService {
   /**
    * Get all organizations with optional filters
    */
-  async getAllOrganizations(filters?: { status?: string; purchasePlain?: string }) {
+  async getAllOrganizations(filters?: {
+    status?: string;
+    purchasePlain?: string;
+  }) {
     const organizations = await organizationRepository.findAll(filters);
     return organizations.map((org) => this.formatOrganizationResponse(org));
   }
@@ -60,7 +63,9 @@ export class OrganizationService {
     // Validate purchase plan
     const validPlans = ["basic", "standard", "premium", "enterprise"];
     if (orgData.purchasePlain && !validPlans.includes(orgData.purchasePlain)) {
-      throw new Error(`Invalid purchase plan. Must be one of: ${validPlans.join(", ")}`);
+      throw new Error(
+        `Invalid purchase plan. Must be one of: ${validPlans.join(", ")}`
+      );
     }
 
     const organization = await organizationRepository.create(orgData);
@@ -90,7 +95,9 @@ export class OrganizationService {
 
     // If email is being updated, check for conflicts
     if (updateData.email && updateData.email !== organization.email) {
-      const existing = await organizationRepository.findByEmail(updateData.email);
+      const existing = await organizationRepository.findByEmail(
+        updateData.email
+      );
       if (existing) {
         throw new Error("Organization with this email already exists");
       }
@@ -100,11 +107,16 @@ export class OrganizationService {
     if (updateData.purchasePlain) {
       const validPlans = ["basic", "standard", "premium", "enterprise"];
       if (!validPlans.includes(updateData.purchasePlain)) {
-        throw new Error(`Invalid purchase plan. Must be one of: ${validPlans.join(", ")}`);
+        throw new Error(
+          `Invalid purchase plan. Must be one of: ${validPlans.join(", ")}`
+        );
       }
     }
 
-    const updatedOrganization = await organizationRepository.update(id, updateData);
+    const updatedOrganization = await organizationRepository.update(
+      id,
+      updateData
+    );
     if (!updatedOrganization) {
       throw new Error("Failed to update organization");
     }

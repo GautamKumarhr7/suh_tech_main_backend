@@ -31,4 +31,12 @@ router.post("/change-password", authenticate, (req, res) =>
   authController.changePassword(req, res)
 );
 
+/**
+ * POST /api/auth/logout
+ * Logout user
+ */
+router.post("/logout", authenticate, (req, res) =>
+  authController.logout(req, res)
+);
+
 export default router;

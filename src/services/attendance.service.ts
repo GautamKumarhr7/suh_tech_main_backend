@@ -21,14 +21,14 @@ export class AttendanceService {
       const validStatuses = ["absent", "present", "on leave", "late"];
       if (!validStatuses.includes(filters.status)) {
         throw new Error(
-          "Invalid status. Must be: absent, present, on leave, or late"
+          "Invalid status. Must be: absent, present, on leave, or late",
         );
       }
     }
 
     const attendances = await attendanceRepository.findAll(filters);
     return attendances.map((attendance) =>
-      this.formatAttendanceResponse(attendance)
+      this.formatAttendanceResponse(attendance),
     );
   }
 
@@ -56,10 +56,10 @@ export class AttendanceService {
     const attendances = await attendanceRepository.findByUserId(
       userId,
       startDate,
-      endDate
+      endDate,
     );
     return attendances.map((attendance) =>
-      this.formatAttendanceResponse(attendance)
+      this.formatAttendanceResponse(attendance),
     );
   }
 
@@ -86,7 +86,7 @@ export class AttendanceService {
     const validStatuses = ["absent", "present", "on leave", "late"];
     if (!validStatuses.includes(attendanceData.status)) {
       throw new Error(
-        "Invalid status. Must be: absent, present, on leave, or late"
+        "Invalid status. Must be: absent, present, on leave, or late",
       );
     }
 
@@ -98,7 +98,7 @@ export class AttendanceService {
     // Check if attendance already exists for this user on this date
     const exists = await attendanceRepository.existsForUserOnDate(
       attendanceData.userId,
-      attendanceData.date
+      attendanceData.date,
     );
 
     if (exists) {
@@ -119,7 +119,7 @@ export class AttendanceService {
       date?: Date;
       clockIn?: Date;
       clockOut?: Date;
-    }
+    },
   ) {
     const attendance = await attendanceRepository.findById(id);
     if (!attendance) {
@@ -131,7 +131,7 @@ export class AttendanceService {
       const validStatuses = ["absent", "present", "on leave", "late"];
       if (!validStatuses.includes(updateData.status)) {
         throw new Error(
-          "Invalid status. Must be: absent, present, on leave, or late"
+          "Invalid status. Must be: absent, present, on leave, or late",
         );
       }
     }
@@ -140,7 +140,7 @@ export class AttendanceService {
     if (updateData.date) {
       const existingOnDate = await attendanceRepository.findByUserIdAndDate(
         attendance.user_id,
-        updateData.date
+        updateData.date,
       );
 
       if (existingOnDate && existingOnDate.id !== id) {
@@ -186,7 +186,7 @@ export class AttendanceService {
     const stats = await attendanceRepository.getStats(
       userId,
       startDate,
-      endDate
+      endDate,
     );
 
     // Format statistics
@@ -221,6 +221,17 @@ export class AttendanceService {
       createdAt: attendance.created_at,
       updatedAt: attendance.updated_at,
     };
+
+    // Calculate total hours if both clockIn and clockOut are present
+    if (attendance.clock_in && attendance.clock_out) {
+      const clockIn = new Date(attendance.clock_in);
+      const clockOut = new Date(attendance.clock_out);
+      const diffMs = clockOut.getTime() - clockIn.getTime();
+      const totalHours = diffMs / (1000 * 60 * 60); // Convert milliseconds to hours
+      formatted.totalHours = parseFloat(totalHours.toFixed(2)); // Round to 2 decimal places
+    } else {
+      formatted.totalHours = null;
+    }
 
     // Include user details if available
     if (attendance.first_name) {

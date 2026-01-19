@@ -19,7 +19,7 @@ const router = Router();
  * Query params: userId, startDate, endDate, status
  */
 router.get("/", authenticate, requireAdmin, (req, res) =>
-  attendanceController.getAllAttendances(req, res)
+  attendanceController.getAllAttendances(req, res),
 );
 
 /**
@@ -27,7 +27,7 @@ router.get("/", authenticate, requireAdmin, (req, res) =>
  * Mark attendance - Admin can mark for any user, users can mark for themselves
  */
 router.post("/", authenticate, (req, res) =>
-  attendanceController.createAttendance(req, res)
+  attendanceController.createAttendance(req, res),
 );
 
 /**
@@ -36,7 +36,7 @@ router.post("/", authenticate, (req, res) =>
  * Query params: startDate, endDate
  */
 router.get("/user/:userId", authenticate, requireOwnerOrAdmin, (req, res) =>
-  attendanceController.getUserAttendances(req, res)
+  attendanceController.getUserAttendances(req, res),
 );
 
 /**
@@ -48,7 +48,7 @@ router.get(
   "/user/:userId/stats",
   authenticate,
   requireOwnerOrAdmin,
-  (req, res) => attendanceController.getAttendanceStats(req, res)
+  (req, res) => attendanceController.getAttendanceStats(req, res),
 );
 
 /**
@@ -56,15 +56,15 @@ router.get(
  * Get attendance by ID - Authenticated users
  */
 router.get("/:id", authenticate, (req, res) =>
-  attendanceController.getAttendanceById(req, res)
+  attendanceController.getAttendanceById(req, res),
 );
 
 /**
- * PUT /api/attendances/:id
- * Update attendance - Admin only
+ * PATCH /api/attendances/:id
+ * Update attendance (clockIn/clockOut) - Admin only
  */
-router.put("/:id", authenticate, requireAdmin, (req, res) =>
-  attendanceController.updateAttendance(req, res)
+router.patch("/:id", authenticate, requireAdmin, (req, res) =>
+  attendanceController.updateAttendance(req, res),
 );
 
 /**
@@ -72,7 +72,7 @@ router.put("/:id", authenticate, requireAdmin, (req, res) =>
  * Delete attendance - Admin only
  */
 router.delete("/:id", authenticate, requireAdmin, (req, res) =>
-  attendanceController.deleteAttendance(req, res)
+  attendanceController.deleteAttendance(req, res),
 );
 
 export default router;

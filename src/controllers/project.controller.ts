@@ -93,7 +93,9 @@ export class ProjectController {
       const projectData = {
         projectName: req.body.projectName,
         clientName: req.body.clientName,
-        startDate: req.body.startDate ? new Date(req.body.startDate) : new Date(),
+        startDate: req.body.startDate
+          ? new Date(req.body.startDate)
+          : new Date(),
         endDate: req.body.endDate ? new Date(req.body.endDate) : undefined,
         status: req.body.status || "pending",
         description: req.body.description,
@@ -150,15 +152,19 @@ export class ProjectController {
 
       if (req.body.projectName) updateData.projectName = req.body.projectName;
       if (req.body.clientName) updateData.clientName = req.body.clientName;
-      if (req.body.startDate) updateData.startDate = new Date(req.body.startDate);
+      if (req.body.startDate)
+        updateData.startDate = new Date(req.body.startDate);
       if (req.body.endDate) updateData.endDate = new Date(req.body.endDate);
       if (req.body.status) updateData.status = req.body.status;
-      if (req.body.description !== undefined) updateData.description = req.body.description;
+      if (req.body.description !== undefined)
+        updateData.description = req.body.description;
       if (req.body.phone !== undefined) updateData.phone = req.body.phone;
       if (req.body.email !== undefined) updateData.email = req.body.email;
-      if (req.body.servicesType !== undefined) updateData.servicesType = req.body.servicesType;
+      if (req.body.servicesType !== undefined)
+        updateData.servicesType = req.body.servicesType;
       if (req.body.budget !== undefined) updateData.budget = req.body.budget;
-      if (req.body.technologyStack !== undefined) updateData.technologyStack = req.body.technologyStack;
+      if (req.body.technologyStack !== undefined)
+        updateData.technologyStack = req.body.technologyStack;
 
       const project = await projectService.updateProject(projectId, updateData);
 

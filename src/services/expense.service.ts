@@ -3,7 +3,10 @@
  * Contains business logic for all expense types
  */
 
-import { expenseRepository, ExpenseType } from "../repositories/expense.repository.js";
+import {
+  expenseRepository,
+  ExpenseType,
+} from "../repositories/expense.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 
 export class ExpenseService {
@@ -12,7 +15,9 @@ export class ExpenseService {
    */
   async getAllEmployeeExpenses() {
     const expenses = await expenseRepository.findEmployeeExpenses();
-    return expenses.map((expense) => this.formatEmployeeExpenseResponse(expense));
+    return expenses.map((expense) =>
+      this.formatEmployeeExpenseResponse(expense)
+    );
   }
 
   /**
@@ -28,7 +33,9 @@ export class ExpenseService {
    */
   async getAllPersonalExpenses() {
     const expenses = await expenseRepository.findPersonalExpenses();
-    return expenses.map((expense) => this.formatPersonalExpenseResponse(expense));
+    return expenses.map((expense) =>
+      this.formatPersonalExpenseResponse(expense)
+    );
   }
 
   /**
@@ -70,7 +77,12 @@ export class ExpenseService {
     createdBy: number;
   }) {
     // Validate required fields
-    if (!expenseData.userId || !expenseData.amount || !expenseData.date || !expenseData.createdBy) {
+    if (
+      !expenseData.userId ||
+      !expenseData.amount ||
+      !expenseData.date ||
+      !expenseData.createdBy
+    ) {
       throw new Error("User ID, amount, date, and creator are required");
     }
 
@@ -125,7 +137,12 @@ export class ExpenseService {
     createdBy: number;
   }) {
     // Validate required fields
-    if (!expenseData.clientName || !expenseData.amount || !expenseData.date || !expenseData.createdBy) {
+    if (
+      !expenseData.clientName ||
+      !expenseData.amount ||
+      !expenseData.date ||
+      !expenseData.createdBy
+    ) {
       throw new Error("Client name, amount, date, and creator are required");
     }
 
@@ -166,7 +183,12 @@ export class ExpenseService {
     createdBy: number;
   }) {
     // Validate required fields
-    if (!expenseData.expenseName || !expenseData.amount || !expenseData.date || !expenseData.createdBy) {
+    if (
+      !expenseData.expenseName ||
+      !expenseData.amount ||
+      !expenseData.date ||
+      !expenseData.createdBy
+    ) {
       throw new Error("Expense name, amount, date, and creator are required");
     }
 
@@ -195,21 +217,24 @@ export class ExpenseService {
   /**
    * Update employee expense
    */
-  async updateEmployeeExpense(id: number, updateData: {
-    amount?: number;
-    phone?: string;
-    status?: string;
-    role?: string;
-    department?: number;
-    paymentMode?: string;
-    basicSalary?: number;
-    hra?: number;
-    conveyance?: number;
-    specialAllowance?: number;
-    pfDeductions?: number;
-    taxDeductions?: number;
-    date?: Date;
-  }) {
+  async updateEmployeeExpense(
+    id: number,
+    updateData: {
+      amount?: number;
+      phone?: string;
+      status?: string;
+      role?: string;
+      department?: number;
+      paymentMode?: string;
+      basicSalary?: number;
+      hra?: number;
+      conveyance?: number;
+      specialAllowance?: number;
+      pfDeductions?: number;
+      taxDeductions?: number;
+      date?: Date;
+    }
+  ) {
     const expense = await expenseRepository.findById(id, "employee");
     if (!expense) {
       throw new Error("Employee expense not found");
@@ -220,21 +245,33 @@ export class ExpenseService {
     }
 
     const data: any = {};
-    if (updateData.amount !== undefined) data.amount = updateData.amount.toString();
+    if (updateData.amount !== undefined)
+      data.amount = updateData.amount.toString();
     if (updateData.phone !== undefined) data.phone = updateData.phone;
     if (updateData.status) data.status = updateData.status;
     if (updateData.role !== undefined) data.role = updateData.role;
-    if (updateData.department !== undefined) data.department = updateData.department;
-    if (updateData.paymentMode !== undefined) data.paymentMode = updateData.paymentMode;
-    if (updateData.basicSalary !== undefined) data.basicSalary = updateData.basicSalary.toString();
+    if (updateData.department !== undefined)
+      data.department = updateData.department;
+    if (updateData.paymentMode !== undefined)
+      data.paymentMode = updateData.paymentMode;
+    if (updateData.basicSalary !== undefined)
+      data.basicSalary = updateData.basicSalary.toString();
     if (updateData.hra !== undefined) data.hra = updateData.hra.toString();
-    if (updateData.conveyance !== undefined) data.conveyance = updateData.conveyance.toString();
-    if (updateData.specialAllowance !== undefined) data.specialAllowance = updateData.specialAllowance.toString();
-    if (updateData.pfDeductions !== undefined) data.pfDeductions = updateData.pfDeductions.toString();
-    if (updateData.taxDeductions !== undefined) data.taxDeductions = updateData.taxDeductions.toString();
-    if (updateData.date) data.date = updateData.date.toISOString().split("T")[0];
+    if (updateData.conveyance !== undefined)
+      data.conveyance = updateData.conveyance.toString();
+    if (updateData.specialAllowance !== undefined)
+      data.specialAllowance = updateData.specialAllowance.toString();
+    if (updateData.pfDeductions !== undefined)
+      data.pfDeductions = updateData.pfDeductions.toString();
+    if (updateData.taxDeductions !== undefined)
+      data.taxDeductions = updateData.taxDeductions.toString();
+    if (updateData.date)
+      data.date = updateData.date.toISOString().split("T")[0];
 
-    const updatedExpense = await expenseRepository.updateEmployeeExpense(id, data);
+    const updatedExpense = await expenseRepository.updateEmployeeExpense(
+      id,
+      data
+    );
     if (!updatedExpense) {
       throw new Error("Failed to update employee expense");
     }
@@ -245,16 +282,19 @@ export class ExpenseService {
   /**
    * Update client expense
    */
-  async updateClientExpense(id: number, updateData: {
-    clientName?: string;
-    projectName?: string;
-    amount?: number;
-    email?: string;
-    phone?: string;
-    status?: string;
-    paymentMode?: string;
-    date?: Date;
-  }) {
+  async updateClientExpense(
+    id: number,
+    updateData: {
+      clientName?: string;
+      projectName?: string;
+      amount?: number;
+      email?: string;
+      phone?: string;
+      status?: string;
+      paymentMode?: string;
+      date?: Date;
+    }
+  ) {
     const expense = await expenseRepository.findById(id, "client");
     if (!expense) {
       throw new Error("Client expense not found");
@@ -266,15 +306,22 @@ export class ExpenseService {
 
     const data: any = {};
     if (updateData.clientName) data.clientName = updateData.clientName;
-    if (updateData.projectName !== undefined) data.projectName = updateData.projectName;
-    if (updateData.amount !== undefined) data.amount = updateData.amount.toString();
+    if (updateData.projectName !== undefined)
+      data.projectName = updateData.projectName;
+    if (updateData.amount !== undefined)
+      data.amount = updateData.amount.toString();
     if (updateData.email !== undefined) data.email = updateData.email;
     if (updateData.phone !== undefined) data.phone = updateData.phone;
     if (updateData.status) data.status = updateData.status;
-    if (updateData.paymentMode !== undefined) data.paymentMode = updateData.paymentMode;
-    if (updateData.date) data.date = updateData.date.toISOString().split("T")[0];
+    if (updateData.paymentMode !== undefined)
+      data.paymentMode = updateData.paymentMode;
+    if (updateData.date)
+      data.date = updateData.date.toISOString().split("T")[0];
 
-    const updatedExpense = await expenseRepository.updateClientExpense(id, data);
+    const updatedExpense = await expenseRepository.updateClientExpense(
+      id,
+      data
+    );
     if (!updatedExpense) {
       throw new Error("Failed to update client expense");
     }
@@ -285,14 +332,17 @@ export class ExpenseService {
   /**
    * Update personal expense
    */
-  async updatePersonalExpense(id: number, updateData: {
-    expenseName?: string;
-    amount?: number;
-    status?: string;
-    category?: string;
-    paymentMode?: string;
-    date?: Date;
-  }) {
+  async updatePersonalExpense(
+    id: number,
+    updateData: {
+      expenseName?: string;
+      amount?: number;
+      status?: string;
+      category?: string;
+      paymentMode?: string;
+      date?: Date;
+    }
+  ) {
     const expense = await expenseRepository.findById(id, "personal");
     if (!expense) {
       throw new Error("Personal expense not found");
@@ -304,13 +354,19 @@ export class ExpenseService {
 
     const data: any = {};
     if (updateData.expenseName) data.expenseName = updateData.expenseName;
-    if (updateData.amount !== undefined) data.amount = updateData.amount.toString();
+    if (updateData.amount !== undefined)
+      data.amount = updateData.amount.toString();
     if (updateData.status) data.status = updateData.status;
     if (updateData.category !== undefined) data.category = updateData.category;
-    if (updateData.paymentMode !== undefined) data.paymentMode = updateData.paymentMode;
-    if (updateData.date) data.date = updateData.date.toISOString().split("T")[0];
+    if (updateData.paymentMode !== undefined)
+      data.paymentMode = updateData.paymentMode;
+    if (updateData.date)
+      data.date = updateData.date.toISOString().split("T")[0];
 
-    const updatedExpense = await expenseRepository.updatePersonalExpense(id, data);
+    const updatedExpense = await expenseRepository.updatePersonalExpense(
+      id,
+      data
+    );
     if (!updatedExpense) {
       throw new Error("Failed to update personal expense");
     }
@@ -340,7 +396,10 @@ export class ExpenseService {
       throw new Error(`Failed to delete ${type} expense`);
     }
 
-    return { success: true, message: `${this.capitalize(type)} expense deleted successfully` };
+    return {
+      success: true,
+      message: `${this.capitalize(type)} expense deleted successfully`,
+    };
   }
 
   /**
@@ -349,7 +408,9 @@ export class ExpenseService {
   private validateStatus(status: string) {
     const validStatuses = ["pending", "paid", "processing"];
     if (!validStatuses.includes(status)) {
-      throw new Error(`Invalid status. Must be one of: ${validStatuses.join(", ")}`);
+      throw new Error(
+        `Invalid status. Must be one of: ${validStatuses.join(", ")}`
+      );
     }
   }
 
@@ -376,9 +437,15 @@ export class ExpenseService {
       basicSalary: expense.basicSalary ? parseFloat(expense.basicSalary) : null,
       hra: expense.hra ? parseFloat(expense.hra) : null,
       conveyance: expense.conveyance ? parseFloat(expense.conveyance) : null,
-      specialAllowance: expense.specialAllowance ? parseFloat(expense.specialAllowance) : null,
-      pfDeductions: expense.pfDeductions ? parseFloat(expense.pfDeductions) : null,
-      taxDeductions: expense.taxDeductions ? parseFloat(expense.taxDeductions) : null,
+      specialAllowance: expense.specialAllowance
+        ? parseFloat(expense.specialAllowance)
+        : null,
+      pfDeductions: expense.pfDeductions
+        ? parseFloat(expense.pfDeductions)
+        : null,
+      taxDeductions: expense.taxDeductions
+        ? parseFloat(expense.taxDeductions)
+        : null,
       date: expense.date,
       createdBy: expense.createdBy,
       createdAt: expense.createdAt,

@@ -52,9 +52,11 @@ curl -X POST http://localhost:3000/projects \
 ## Key Files Created
 
 **Migration:**
+
 - `migrations/1736900000000_add-new-tables.cjs`
 
 **Repositories (5 files):**
+
 - `src/repositories/project.repository.ts`
 - `src/repositories/organization.repository.ts`
 - `src/repositories/employeeExpense.repository.ts`
@@ -62,6 +64,7 @@ curl -X POST http://localhost:3000/projects \
 - `src/repositories/companyPersonalExpense.repository.ts`
 
 **Services (5 files):**
+
 - `src/services/project.service.ts`
 - `src/services/organization.service.ts`
 - `src/services/employeeExpense.service.ts`
@@ -69,6 +72,7 @@ curl -X POST http://localhost:3000/projects \
 - `src/services/companyPersonalExpense.service.ts`
 
 **Controllers (5 files):**
+
 - `src/controllers/project.controller.ts`
 - `src/controllers/organization.controller.ts`
 - `src/controllers/employeeExpense.controller.ts`
@@ -76,6 +80,7 @@ curl -X POST http://localhost:3000/projects \
 - `src/controllers/companyPersonalExpense.controller.ts`
 
 **Routes (5 files):**
+
 - `src/routes/project.routes.ts`
 - `src/routes/organization.routes.ts`
 - `src/routes/employeeExpense.routes.ts`
@@ -83,12 +88,14 @@ curl -X POST http://localhost:3000/projects \
 - `src/routes/companyPersonalExpense.routes.ts`
 
 **Updated:**
+
 - `src/index.ts` - Added new route registrations
 - `src/db/schema.ts` - Added new interfaces
 
 ## Common Operations
 
 ### Create a Record
+
 ```http
 POST /projects
 POST /organizations
@@ -98,6 +105,7 @@ POST /personal-expenses
 ```
 
 ### Get All Records (with filters)
+
 ```http
 GET /projects?status=pending&clientName=ABC
 GET /organizations?purchasePlain=premium
@@ -107,18 +115,21 @@ GET /personal-expenses?category=operational
 ```
 
 ### Get Single Record
+
 ```http
 GET /projects/1
 GET /organizations/1
 ```
 
 ### Update Record
+
 ```http
 PUT /projects/1
 PUT /organizations/1
 ```
 
 ### Delete Record
+
 ```http
 DELETE /projects/1
 DELETE /organizations/1
