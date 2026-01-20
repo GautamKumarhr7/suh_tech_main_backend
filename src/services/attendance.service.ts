@@ -15,6 +15,7 @@ export class AttendanceService {
     startDate?: Date;
     endDate?: Date;
     status?: string;
+    date?: Date;
   }) {
     // Validate status if provided
     if (filters?.status) {

@@ -31,6 +31,10 @@ export class AttendanceController {
         filters.status = req.query.status as string;
       }
 
+      if (req.query.date) {
+        filters.date = new Date(req.query.date as string);
+      }
+
       const attendances = await attendanceService.getAllAttendances(filters);
 
       res.json({

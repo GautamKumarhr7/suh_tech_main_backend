@@ -27,6 +27,7 @@ export class AttendanceRepository {
     startDate?: Date;
     endDate?: Date;
     status?: string;
+    date?: Date;
   }) {
     let query = `
       SELECT a.id, a.user_id, a.date, a.status, a.clock_in, a.clock_out, a.created_at, a.updated_at,
@@ -59,6 +60,14 @@ export class AttendanceRepository {
     if (filters?.status) {
       query += ` AND a.status = $${paramIndex}`;
       params.push(filters.status);
+      paramIndex++;
+    }
+
+    if (filters?.date) {
+      // Extract just the date portion and compare
+      const dateStr = filters.date.toISOString().split('T')[0];
+      query += ` AND a.created_at::date = $${paramIndex}::date`;
+      params.push(dateStr);
       paramIndex++;
     }
 

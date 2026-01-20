@@ -16,7 +16,7 @@ const router = Router();
 /**
  * GET /api/attendances
  * Get all attendances - Admin only
- * Query params: userId, startDate, endDate, status
+ * Query params: userId, startDate, endDate, status, date (filters by created_at)
  */
 router.get("/", authenticate, requireAdmin, (req, res) =>
   attendanceController.getAllAttendances(req, res),
