@@ -74,28 +74,20 @@ export class ExpenseService {
     pfDeductions?: number;
     taxDeductions?: number;
     date: Date;
-    createdBy: number;
   }) {
     // Validate required fields
     if (
       !expenseData.userId ||
       !expenseData.amount ||
-      !expenseData.date ||
-      !expenseData.createdBy
+      !expenseData.date
     ) {
-      throw new Error("User ID, amount, date, and creator are required");
+      throw new Error("User ID, amount, and date are required");
     }
 
     // Verify user exists
     const user = await userRepository.findById(expenseData.userId);
     if (!user) {
       throw new Error("User not found");
-    }
-
-    // Verify creator exists
-    const creator = await userRepository.findById(expenseData.createdBy);
-    if (!creator) {
-      throw new Error("Creator user not found");
     }
 
     // Validate status
@@ -116,7 +108,7 @@ export class ExpenseService {
       pfDeductions: expenseData.pfDeductions?.toString(),
       taxDeductions: expenseData.taxDeductions?.toString(),
       date: expenseData.date.toISOString().split("T")[0],
-      createdBy: expenseData.createdBy,
+      createdBy: expenseData.userId,
     });
 
     return this.formatEmployeeExpenseResponse(expense);

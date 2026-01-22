@@ -55,7 +55,7 @@ export class ExpenseController {
       const { id } = req.params;
       const expense = await expenseService.getExpenseById(
         parseInt(id),
-        "employee"
+        "employee",
       );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
@@ -76,7 +76,7 @@ export class ExpenseController {
       const { id } = req.params;
       const expense = await expenseService.getExpenseById(
         parseInt(id),
-        "client"
+        "client",
       );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
@@ -97,7 +97,7 @@ export class ExpenseController {
       const { id } = req.params;
       const expense = await expenseService.getExpenseById(
         parseInt(id),
-        "personal"
+        "personal",
       );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
@@ -115,6 +115,8 @@ export class ExpenseController {
    */
   async createEmployeeExpense(req: Request, res: Response) {
     try {
+      const user = req.user;
+      console.log("Authenticated user info:", user);
       const expenseData = {
         userId: parseInt(req.body.userId),
         amount: parseFloat(req.body.amount),
@@ -142,7 +144,6 @@ export class ExpenseController {
           ? parseFloat(req.body.taxDeductions)
           : undefined,
         date: new Date(req.body.date),
-        createdBy: (req as any).user.userId,
       };
 
       const expense = await expenseService.createEmployeeExpense(expenseData);
@@ -175,8 +176,12 @@ export class ExpenseController {
         status: req.body.status,
         paymentMode: req.body.paymentMode,
         date: new Date(req.body.date),
-        createdBy: (req as any).user.userId,
+        createdBy: (req as any).user.id,
       };
+
+      if (!expenseData.createdBy) {
+        throw new Error("Creator user ID not found in authentication token.");
+      }
 
       const expense = await expenseService.createClientExpense(expenseData);
       res.status(201).json({ success: true, data: expense });
@@ -206,8 +211,12 @@ export class ExpenseController {
         category: req.body.category,
         paymentMode: req.body.paymentMode,
         date: new Date(req.body.date),
-        createdBy: (req as any).user.userId,
+        createdBy: (req as any).user.id,
       };
+
+      if (!expenseData.createdBy) {
+        throw new Error("Creator user ID not found in authentication token.");
+      }
 
       const expense = await expenseService.createPersonalExpense(expenseData);
       res.status(201).json({ success: true, data: expense });
@@ -257,7 +266,7 @@ export class ExpenseController {
 
       const expense = await expenseService.updateEmployeeExpense(
         parseInt(id),
-        updateData
+        updateData,
       );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
@@ -294,7 +303,7 @@ export class ExpenseController {
 
       const expense = await expenseService.updateClientExpense(
         parseInt(id),
-        updateData
+        updateData,
       );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
@@ -329,7 +338,7 @@ export class ExpenseController {
 
       const expense = await expenseService.updatePersonalExpense(
         parseInt(id),
-        updateData
+        updateData,
       );
       res.status(200).json({ success: true, data: expense });
     } catch (error: any) {
@@ -352,7 +361,7 @@ export class ExpenseController {
       const { id } = req.params;
       const result = await expenseService.deleteExpense(
         parseInt(id),
-        "employee"
+        "employee",
       );
       res.status(200).json(result);
     } catch (error: any) {
@@ -391,7 +400,7 @@ export class ExpenseController {
       const { id } = req.params;
       const result = await expenseService.deleteExpense(
         parseInt(id),
-        "personal"
+        "personal",
       );
       res.status(200).json(result);
     } catch (error: any) {

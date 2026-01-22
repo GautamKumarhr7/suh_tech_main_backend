@@ -14,7 +14,7 @@ export class AttendanceRepository {
       `SELECT id, user_id, date, status, clock_in, clock_out, created_at, updated_at
        FROM attendances 
        WHERE id = $1`,
-      [id]
+      [id],
     );
     return result.rows[0] || null;
   }
@@ -65,7 +65,7 @@ export class AttendanceRepository {
 
     if (filters?.date) {
       // Extract just the date portion and compare
-      const dateStr = filters.date.toISOString().split('T')[0];
+      const dateStr = filters.date.toISOString().split("T")[0];
       query += ` AND a.created_at::date = $${paramIndex}::date`;
       params.push(dateStr);
       paramIndex++;
@@ -113,7 +113,7 @@ export class AttendanceRepository {
   async existsForUserOnDate(userId: number, date: Date): Promise<boolean> {
     const result = await pool.query(
       `SELECT id FROM attendances WHERE user_id = $1 AND date = $2`,
-      [userId, date]
+      [userId, date],
     );
     return result.rows.length > 0;
   }
@@ -126,7 +126,7 @@ export class AttendanceRepository {
       `SELECT id, user_id, date, status, clock_in, clock_out, created_at, updated_at
        FROM attendances 
        WHERE user_id = $1 AND date = $2`,
-      [userId, date]
+      [userId, date],
     );
     return result.rows[0] || null;
   }
@@ -151,7 +151,7 @@ export class AttendanceRepository {
         attendanceData.status,
         attendanceData.clockIn || null,
         attendanceData.clockOut || null,
-      ]
+      ],
     );
     return result.rows[0];
   }
@@ -161,7 +161,7 @@ export class AttendanceRepository {
    */
   async update(
     id: number,
-    data: { status?: string; date?: Date; clockIn?: Date; clockOut?: Date }
+    data: { status?: string; date?: Date; clockIn?: Date; clockOut?: Date },
   ) {
     const result = await pool.query(
       `UPDATE attendances 
@@ -172,7 +172,7 @@ export class AttendanceRepository {
            updated_at = CURRENT_TIMESTAMP
        WHERE id = $5
        RETURNING id, user_id, date, status, clock_in, clock_out, created_at, updated_at`,
-      [data.status, data.date, data.clockIn, data.clockOut, id]
+      [data.status, data.date, data.clockIn, data.clockOut, id],
     );
     return result.rows[0] || null;
   }
@@ -185,7 +185,7 @@ export class AttendanceRepository {
       `DELETE FROM attendances 
        WHERE id = $1
        RETURNING id`,
-      [id]
+      [id],
     );
     return result.rows[0] || null;
   }

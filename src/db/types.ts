@@ -147,7 +147,7 @@ export type projectStatus = [
   "in progress",
   "completed",
   "on hold",
-  "cancelled"
+  "cancelled",
 ];
 export type servicesTypes = [
   "web development",
@@ -156,7 +156,7 @@ export type servicesTypes = [
   "custom software",
   "maintenance",
   "consulting",
-  "other"
+  "other",
 ];
 export type technologyStacks = [
   "javascript",
@@ -166,5 +166,5 @@ export type technologyStacks = [
   "php",
   "ruby",
   "go",
-  "typescript"
+  "typescript",
 ];

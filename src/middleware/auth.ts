@@ -14,7 +14,21 @@ declare global {
       user?: {
         id: number;
         email: string;
+        firstName: string;
+        lastName: string;
+        address: string | null;
         admin: boolean;
+        empId: string | null;
+        phoneNumber: string | null;
+        designationId: number | null;
+        departmentId: number | null;
+        joinedDate: string | null;
+        skills: string | null;
+        active: boolean;
+        empType: string;
+        isDeleted: boolean;
+        createdAt: Date;
+        updatedAt: Date;
       };
     }
   }
@@ -54,9 +68,12 @@ export const authenticate = async (
       email: string;
     };
 
-    // Verify user still exists and is active
+    // Verify user still exists and is active - fetch all fields except password
     const result = await pool.query(
-      "SELECT id, email, admin, active, is_deleted FROM users WHERE id = $1",
+      `SELECT id, email, first_name, last_name, address, admin, emp_id, 
+              phone_number, designation_id, department_id, joined_date, 
+              skills, active, emp_type, is_deleted, created_at, updated_at 
+       FROM users WHERE id = $1`,
       [decoded.userId]
     );
 
@@ -76,11 +93,25 @@ export const authenticate = async (
       });
     }
 
-    // Attach user to request object
+    // Attach all user data (except password) to request object
     req.user = {
       id: user.id,
       email: user.email,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      address: user.address,
       admin: user.admin,
+      empId: user.emp_id,
+      phoneNumber: user.phone_number,
+      designationId: user.designation_id,
+      departmentId: user.department_id,
+      joinedDate: user.joined_date,
+      skills: user.skills,
+      active: user.active,
+      empType: user.emp_type,
+      isDeleted: user.is_deleted,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
     };
 
     next();
