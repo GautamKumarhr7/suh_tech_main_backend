@@ -42,7 +42,7 @@ declare global {
 export const authenticate = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     // Get token from Authorization header (Bearer token)
@@ -74,7 +74,7 @@ export const authenticate = async (
               phone_number, designation_id, department_id, joined_date, 
               skills, active, emp_type, is_deleted, created_at, updated_at 
        FROM users WHERE id = $1`,
-      [decoded.userId]
+      [decoded.userId],
     );
 
     if (result.rows.length === 0) {
@@ -146,7 +146,7 @@ export const authenticate = async (
 export const requireAdmin = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (!req.user) {
     return res.status(401).json({
@@ -173,7 +173,7 @@ export const requireAdmin = (
 export const requireOwnerOrAdmin = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (!req.user) {
     return res.status(401).json({

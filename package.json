@@ -11,7 +11,7 @@
     "db:setup": "npm run migrate:up && npm run db:seed",
     "migrate:up": "node scripts/migrate-safe.js up",
     "migrate:down": "node scripts/migrate-safe.js down",
-    "migrate:create": "node-pg-migrate create",
+    "migrate:create": "node scripts/create-migration.js",
     "migrate:up:direct": "node-pg-migrate up",
     "migrate:down:direct": "node-pg-migrate down"
   },
