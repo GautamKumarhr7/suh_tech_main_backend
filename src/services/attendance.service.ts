@@ -214,12 +214,18 @@ export class AttendanceService {
    * Format attendance response
    */
   private formatAttendanceResponse(attendance: any) {
+    // Extract date as YYYY-MM-DD to avoid timezone issues
+    const dateOnly =
+      attendance.date instanceof Date
+        ? attendance.date.toISOString().split("T")[0]
+        : new Date(attendance.date).toISOString().split("T")[0];
+
     const formatted: any = {
       id: attendance.id,
       userId: attendance.user_id,
-      date: attendance.date,
+      date: dateOnly,
       status: attendance.status,
-      markedBy: attendance.marked_by,
+      markedBy: attendance.marked_By,
       clockIn: attendance.clock_in,
       clockOut: attendance.clock_out,
       createdAt: attendance.created_at,

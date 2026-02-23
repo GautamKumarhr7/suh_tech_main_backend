@@ -11,7 +11,7 @@ export class AttendanceRepository {
    */
   async findById(id: number) {
     const result = await pool.query(
-      `SELECT id, user_id, date, status, marked_by, clock_in, clock_out, created_at, updated_at
+      `SELECT id, user_id, date, status, "marked_By", clock_in, clock_out, created_at, updated_at
        FROM attendances 
        WHERE id = $1`,
       [id],
@@ -30,7 +30,7 @@ export class AttendanceRepository {
     date?: Date;
   }) {
     let query = `
-      SELECT a.id, a.user_id, a.date, a.status, a.marked_by, a.clock_in, a.clock_out, a.created_at, a.updated_at,
+      SELECT a.id, a.user_id, a.date, a.status, a."marked_By", a.clock_in, a.clock_out, a.created_at, a.updated_at,
              u.first_name, u.last_name, u.email, u.emp_id
       FROM attendances a
       INNER JOIN users u ON a.user_id = u.id
@@ -46,14 +46,16 @@ export class AttendanceRepository {
     }
 
     if (filters?.startDate) {
-      query += ` AND a.date >= $${paramIndex}`;
-      params.push(filters.startDate);
+      const startDateStr = filters.startDate.toISOString().split("T")[0];
+      query += ` AND a.date >= $${paramIndex}::date`;
+      params.push(startDateStr);
       paramIndex++;
     }
 
     if (filters?.endDate) {
-      query += ` AND a.date <= $${paramIndex}`;
-      params.push(filters.endDate);
+      const endDateStr = filters.endDate.toISOString().split("T")[0];
+      query += ` AND a.date <= $${paramIndex}::date`;
+      params.push(endDateStr);
       paramIndex++;
     }
 
@@ -64,9 +66,9 @@ export class AttendanceRepository {
     }
 
     if (filters?.date) {
-      // Extract just the date portion and compare
+      // Extract just the date portion and compare against the date column
       const dateStr = filters.date.toISOString().split("T")[0];
-      query += ` AND a.created_at::date = $${paramIndex}::date`;
+      query += ` AND a.date = $${paramIndex}::date`;
       params.push(dateStr);
       paramIndex++;
     }
@@ -82,7 +84,7 @@ export class AttendanceRepository {
    */
   async findByUserId(userId: number, startDate?: Date, endDate?: Date) {
     let query = `
-      SELECT id, user_id, date, status, marked_by, clock_in, clock_out, created_at, updated_at
+      SELECT id, user_id, date, status, "marked_By", clock_in, clock_out, created_at, updated_at
       FROM attendances 
       WHERE user_id = $1
     `;
@@ -90,14 +92,16 @@ export class AttendanceRepository {
     let paramIndex = 2;
 
     if (startDate) {
-      query += ` AND date >= $${paramIndex}`;
-      params.push(startDate);
+      const startDateStr = startDate.toISOString().split("T")[0];
+      query += ` AND date >= $${paramIndex}::date`;
+      params.push(startDateStr);
       paramIndex++;
     }
 
     if (endDate) {
-      query += ` AND date <= $${paramIndex}`;
-      params.push(endDate);
+      const endDateStr = endDate.toISOString().split("T")[0];
+      query += ` AND date <= $${paramIndex}::date`;
+      params.push(endDateStr);
       paramIndex++;
     }
 
@@ -111,9 +115,11 @@ export class AttendanceRepository {
    * Check if attendance exists for user on specific date
    */
   async existsForUserOnDate(userId: number, date: Date): Promise<boolean> {
+    // Convert date to YYYY-MM-DD string to avoid timezone issues
+    const dateStr = date.toISOString().split("T")[0];
     const result = await pool.query(
-      `SELECT id FROM attendances WHERE user_id = $1 AND date = $2`,
-      [userId, date],
+      `SELECT id FROM attendances WHERE user_id = $1 AND date = $2::date`,
+      [userId, dateStr],
     );
     return result.rows.length > 0;
   }
@@ -122,11 +128,13 @@ export class AttendanceRepository {
    * Find attendance by user ID and date
    */
   async findByUserIdAndDate(userId: number, date: Date) {
+    // Convert date to YYYY-MM-DD string to avoid timezone issues
+    const dateStr = date.toISOString().split("T")[0];
     const result = await pool.query(
-      `SELECT id, user_id, date, status, marked_by, clock_in, clock_out, created_at, updated_at
+      `SELECT id, user_id, date, status, "marked_By", clock_in, clock_out, created_at, updated_at
        FROM attendances 
-       WHERE user_id = $1 AND date = $2`,
-      [userId, date],
+       WHERE user_id = $1 AND date = $2::date`,
+      [userId, dateStr],
     );
     return result.rows[0] || null;
   }
@@ -142,13 +150,16 @@ export class AttendanceRepository {
     clockIn?: Date;
     clockOut?: Date;
   }) {
+    // Convert date to YYYY-MM-DD string to avoid timezone issues
+    const dateStr = attendanceData.date.toISOString().split("T")[0];
+
     const result = await pool.query(
-      `INSERT INTO attendances (user_id, date, status, marked_by, clock_in, clock_out)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING id, user_id, date, status, marked_by, clock_in, clock_out, created_at, updated_at`,
+      `INSERT INTO attendances (user_id, date, status, "marked_By", clock_in, clock_out)
+       VALUES ($1, $2::date, $3, $4, $5, $6)
+       RETURNING id, user_id, date, status, "marked_By", clock_in, clock_out, created_at, updated_at`,
       [
         attendanceData.userId,
-        attendanceData.date,
+        dateStr,
         attendanceData.status,
         attendanceData.markedBy,
         attendanceData.clockIn || null,
@@ -165,16 +176,19 @@ export class AttendanceRepository {
     id: number,
     data: { status?: string; date?: Date; clockIn?: Date; clockOut?: Date },
   ) {
+    // Convert date to YYYY-MM-DD string if provided to avoid timezone issues
+    const dateStr = data.date ? data.date.toISOString().split("T")[0] : null;
+
     const result = await pool.query(
       `UPDATE attendances 
        SET status = COALESCE($1, status),
-           date = COALESCE($2, date),
+           date = COALESCE($2::date, date),
            clock_in = COALESCE($3, clock_in),
            clock_out = COALESCE($4, clock_out),
            updated_at = CURRENT_TIMESTAMP
        WHERE id = $5
-       RETURNING id, user_id, date, status, marked_by, clock_in, clock_out, created_at, updated_at`,
-      [data.status, data.date, data.clockIn, data.clockOut, id],
+       RETURNING id, user_id, date, status, "marked_By", clock_in, clock_out, created_at, updated_at`,
+      [data.status, dateStr, data.clockIn, data.clockOut, id],
     );
     return result.rows[0] || null;
   }
@@ -207,14 +221,16 @@ export class AttendanceRepository {
     let paramIndex = 2;
 
     if (startDate) {
-      query += ` AND date >= $${paramIndex}`;
-      params.push(startDate);
+      const startDateStr = startDate.toISOString().split("T")[0];
+      query += ` AND date >= $${paramIndex}::date`;
+      params.push(startDateStr);
       paramIndex++;
     }
 
     if (endDate) {
-      query += ` AND date <= $${paramIndex}`;
-      params.push(endDate);
+      const endDateStr = endDate.toISOString().split("T")[0];
+      query += ` AND date <= $${paramIndex}::date`;
+      params.push(endDateStr);
       paramIndex++;
     }
 

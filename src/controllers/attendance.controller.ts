@@ -20,11 +20,17 @@ export class AttendanceController {
       }
 
       if (req.query.startDate) {
-        filters.startDate = new Date(req.query.startDate as string);
+        // Extract just the date portion to avoid timezone issues
+        filters.startDate = new Date(
+          new Date(req.query.startDate as string).toISOString().split("T")[0],
+        );
       }
 
       if (req.query.endDate) {
-        filters.endDate = new Date(req.query.endDate as string);
+        // Extract just the date portion to avoid timezone issues
+        filters.endDate = new Date(
+          new Date(req.query.endDate as string).toISOString().split("T")[0],
+        );
       }
 
       if (req.query.status) {
@@ -32,7 +38,10 @@ export class AttendanceController {
       }
 
       if (req.query.date) {
-        filters.date = new Date(req.query.date as string);
+        // Extract just the date portion to avoid timezone issues
+        filters.date = new Date(
+          new Date(req.query.date as string).toISOString().split("T")[0],
+        );
       }
 
       const attendances = await attendanceService.getAllAttendances(filters);
@@ -64,9 +73,33 @@ export class AttendanceController {
    */
   async createAttendance(req: Request, res: Response) {
     try {
+      // Parse date as YYYY-MM-DD string to avoid timezone issues
+      let dateStr: string;
+      if (req.body.date) {
+        // Extract just the date portion if provided
+        dateStr = new Date(req.body.date).toISOString().split("T")[0];
+      } else {
+        // Use today's date
+        dateStr = new Date().toISOString().split("T")[0];
+      }
+
+      // Check admin permission for current/previous dates
+      const requestedDate = new Date(dateStr + "T00:00:00");
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Only admin can mark attendance for current or previous dates
+      if (requestedDate <= today && !req.user!.admin) {
+        return res.status(403).json({
+          success: false,
+          message:
+            "Only admin users can mark attendance for current or previous dates",
+        });
+      }
+
       const attendanceData = {
         userId: req.body.userId || req.user!.id,
-        date: req.body.date ? new Date(req.body.date) : new Date(),
+        date: new Date(dateStr),
         status: req.body.status,
         markedBy: req.user!.id,
         clockIn: req.body.clockIn ? new Date(req.body.clockIn) : undefined,
@@ -164,10 +197,14 @@ export class AttendanceController {
       }
 
       const startDate = req.query.startDate
-        ? new Date(req.query.startDate as string)
+        ? new Date(
+            new Date(req.query.startDate as string).toISOString().split("T")[0],
+          )
         : undefined;
       const endDate = req.query.endDate
-        ? new Date(req.query.endDate as string)
+        ? new Date(
+            new Date(req.query.endDate as string).toISOString().split("T")[0],
+          )
         : undefined;
 
       const attendances = await attendanceService.getUserAttendances(
@@ -219,7 +256,9 @@ export class AttendanceController {
       }
 
       if (req.body.date) {
-        updateData.date = new Date(req.body.date);
+        // Extract just the date portion to avoid timezone issues
+        const dateStr = new Date(req.body.date).toISOString().split("T")[0];
+        updateData.date = new Date(dateStr);
       }
 
       if (req.body.clockIn !== undefined) {
@@ -331,10 +370,14 @@ export class AttendanceController {
       }
 
       const startDate = req.query.startDate
-        ? new Date(req.query.startDate as string)
+        ? new Date(
+            new Date(req.query.startDate as string).toISOString().split("T")[0],
+          )
         : undefined;
       const endDate = req.query.endDate
-        ? new Date(req.query.endDate as string)
+        ? new Date(
+            new Date(req.query.endDate as string).toISOString().split("T")[0],
+          )
         : undefined;
 
       const stats = await attendanceService.getAttendanceStats(
