@@ -71,6 +71,7 @@ export class AttendanceService {
     userId: number;
     date: Date;
     status: string;
+    markedBy: number;
     clockIn?: Date;
     clockOut?: Date;
   }) {
@@ -78,9 +79,10 @@ export class AttendanceService {
     if (
       !attendanceData.userId ||
       !attendanceData.date ||
-      !attendanceData.status
+      !attendanceData.status ||
+      !attendanceData.markedBy
     ) {
-      throw new Error("User ID, date, and status are required");
+      throw new Error("User ID, date, status, and markedBy are required");
     }
 
     // Validate status
@@ -217,6 +219,7 @@ export class AttendanceService {
       userId: attendance.user_id,
       date: attendance.date,
       status: attendance.status,
+      markedBy: attendance.marked_by,
       clockIn: attendance.clock_in,
       clockOut: attendance.clock_out,
       createdAt: attendance.created_at,

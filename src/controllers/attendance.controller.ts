@@ -65,9 +65,10 @@ export class AttendanceController {
   async createAttendance(req: Request, res: Response) {
     try {
       const attendanceData = {
-        userId: req.body.userId,
+        userId: req.body.userId || req.user!.id,
         date: req.body.date ? new Date(req.body.date) : new Date(),
         status: req.body.status,
+        markedBy: req.user!.id,
         clockIn: req.body.clockIn ? new Date(req.body.clockIn) : undefined,
         clockOut: req.body.clockOut ? new Date(req.body.clockOut) : undefined,
       };
