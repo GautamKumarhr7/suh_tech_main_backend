@@ -18,7 +18,7 @@ const router = Router();
  * Get all users - Admin only
  */
 router.get("/", authenticate, requireAdmin, (req, res) =>
-  userController.getAllUsers(req, res)
+  userController.getAllUsers(req, res),
 );
 
 /**
@@ -26,7 +26,15 @@ router.get("/", authenticate, requireAdmin, (req, res) =>
  * Create new user - Admin only
  */
 router.post("/", authenticate, requireAdmin, (req, res) =>
-  userController.createUser(req, res)
+  userController.createUser(req, res),
+);
+
+/**
+ * GET /api/users/profile
+ * Get current authenticated user's profile
+ */
+router.get("/profile", authenticate, (req, res) =>
+  userController.getUserProfile(req, res),
 );
 
 /**
@@ -34,7 +42,7 @@ router.post("/", authenticate, requireAdmin, (req, res) =>
  * Get user by ID - Owner or Admin
  */
 router.get("/:id", authenticate, requireOwnerOrAdmin, (req, res) =>
-  userController.getUserById(req, res)
+  userController.getUserById(req, res),
 );
 
 /**
@@ -42,7 +50,7 @@ router.get("/:id", authenticate, requireOwnerOrAdmin, (req, res) =>
  * Update user - Owner or Admin
  */
 router.put("/:id", authenticate, requireOwnerOrAdmin, (req, res) =>
-  userController.updateUser(req, res)
+  userController.updateUser(req, res),
 );
 
 /**
@@ -50,7 +58,7 @@ router.put("/:id", authenticate, requireOwnerOrAdmin, (req, res) =>
  * Delete user - Admin only
  */
 router.delete("/:id", authenticate, requireAdmin, (req, res) =>
-  userController.deleteUser(req, res)
+  userController.deleteUser(req, res),
 );
 
 export default router;

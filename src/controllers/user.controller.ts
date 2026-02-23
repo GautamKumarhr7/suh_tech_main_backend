@@ -123,6 +123,37 @@ export class UserController {
   }
 
   /**
+   * GET /api/users/profile
+   * Get current authenticated user's profile
+   */
+  async getUserProfile(req: Request, res: Response) {
+    try {
+      const userId = req.user!.id;
+
+      const user = await userService.getUserById(userId);
+
+      res.json({
+        success: true,
+        data: user,
+      });
+    } catch (error: any) {
+      console.error("Get user profile error:", error);
+
+      if (error.message === "User not found") {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      res.status(500).json({
+        success: false,
+        message: "Failed to fetch user profile",
+      });
+    }
+  }
+
+  /**
    * PUT /api/users/:id
    * Update user
    */
