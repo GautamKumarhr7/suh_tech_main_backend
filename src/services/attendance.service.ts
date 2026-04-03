@@ -19,10 +19,16 @@ export class AttendanceService {
   }) {
     // Validate status if provided
     if (filters?.status) {
-      const validStatuses = ["absent", "present", "on leave", "late"];
+      const validStatuses = [
+        "absent",
+        "present",
+        "on leave",
+        "late",
+        "half-day",
+      ];
       if (!validStatuses.includes(filters.status)) {
         throw new Error(
-          "Invalid status. Must be: absent, present, on leave, or late",
+          "Invalid status. Must be: absent, present, on leave, late, or half-day",
         );
       }
     }
@@ -86,10 +92,10 @@ export class AttendanceService {
     }
 
     // Validate status
-    const validStatuses = ["absent", "present", "on leave", "late"];
+    const validStatuses = ["absent", "present", "on leave", "late", "half-day"];
     if (!validStatuses.includes(attendanceData.status)) {
       throw new Error(
-        "Invalid status. Must be: absent, present, on leave, or late",
+        "Invalid status. Must be: absent, present, on leave, late, or half-day",
       );
     }
 
@@ -131,10 +137,16 @@ export class AttendanceService {
 
     // Validate status if provided
     if (updateData.status) {
-      const validStatuses = ["absent", "present", "on leave", "late"];
+      const validStatuses = [
+        "absent",
+        "present",
+        "on leave",
+        "late",
+        "half-day",
+      ];
       if (!validStatuses.includes(updateData.status)) {
         throw new Error(
-          "Invalid status. Must be: absent, present, on leave, or late",
+          "Invalid status. Must be: absent, present, on leave, late, or half-day",
         );
       }
     }
