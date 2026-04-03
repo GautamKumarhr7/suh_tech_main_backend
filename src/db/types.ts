@@ -4,7 +4,12 @@
  */
 
 export type EmpType = "full-time" | "part-time" | "contract" | "intern";
-export type AttendanceStatus = "absent" | "present" | "on leave" | "late";
+export type AttendanceStatus =
+  | "absent"
+  | "present"
+  | "on leave"
+  | "late"
+  | "half-day";
 export type ExpanceStatus = "pending" | "paid" | "processing";
 
 // Departments table
