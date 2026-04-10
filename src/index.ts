@@ -12,6 +12,11 @@ import designationRoutes from "./routes/designation.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import organizationRoutes from "./routes/organization.routes.js";
 import expenseRoutes from "./routes/expense.routes.js";
+import jobRoutes from "./routes/job.routes.js";
+import blogRoutes from "./routes/blog.routes.js";
+import manualInvoiceRoutes from "./routes/manual-invoice.routes.js";
+import holidayRoutes from "./routes/holiday.routes.js";
+import systemPreferencesRoutes from "./routes/system-preferences.routes.js";
 
 const app = express();
 
@@ -22,7 +27,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
 app.use(express.json());
@@ -41,6 +46,11 @@ app.use("/designations", designationRoutes);
 app.use("/projects", projectRoutes);
 app.use("/organizations", organizationRoutes);
 app.use("/expenses", expenseRoutes);
+app.use("/jobs", jobRoutes);
+app.use("/blogs", blogRoutes);
+app.use("/manual-invoices", manualInvoiceRoutes);
+app.use("/holidays", holidayRoutes);
+app.use("/system-preferences", systemPreferencesRoutes);
 
 // 404 handler
 app.use((req, res) => {

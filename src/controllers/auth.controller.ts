@@ -106,7 +106,7 @@ export class AuthController {
       await authService.changePassword(
         req.user!.id,
         currentPassword,
-        newPassword
+        newPassword,
       );
 
       res.json({
@@ -137,6 +137,53 @@ export class AuthController {
       res.status(500).json({
         success: false,
         message: "Failed to change password. Please try again.",
+      });
+    }
+  }
+
+  /**
+   * POST /api/auth/reset-password
+   * Reset user password
+   */
+  async resetPassword(req: Request, res: Response) {
+    try {
+      const currentPassword = req.body.currentPassword ?? req.body.current;
+      const newPassword = req.body.newPassword ?? req.body.new;
+
+      await authService.resetPassword(
+        req.user!.id,
+        currentPassword,
+        newPassword,
+      );
+
+      res.json({
+        success: true,
+        message: "Password reset successfully",
+      });
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+
+      if (
+        error.message.includes("required") ||
+        error.message.includes("must be") ||
+        error.message.includes("incorrect")
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      }
+
+      if (error.message === "User not found") {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      res.status(500).json({
+        success: false,
+        message: "Failed to reset password. Please try again.",
       });
     }
   }

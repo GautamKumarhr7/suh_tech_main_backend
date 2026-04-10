@@ -147,6 +147,86 @@ export interface Projects {
   updated_at: Date;
   isDeleted: boolean;
 }
+
+export interface Job {
+  id: number;
+  title: string;
+  type: string;
+  location: string;
+  description: string | null;
+  responsibilities: string | null;
+  requirements: string | null;
+  active: boolean;
+  created_at: Date;
+  updated_at: Date;
+  is_deleted: boolean;
+}
+
+export interface Blog {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string;
+  image_url: string | null;
+  category: string | null;
+  tags: string | null;
+  published: boolean;
+  created_at: Date;
+  updated_at: Date;
+  is_deleted: boolean;
+}
+
+export interface ManualInvoice {
+  id: number;
+  client_name: string;
+  client_email: string | null;
+  contact_phone: string | null;
+  address: string | null;
+  service_description: string;
+  phase_work: string | null;
+  service_type: string;
+  service_category: string;
+  tax_rate: number | null;
+  discount: number | null;
+  maintenance_due_date: Date | null;
+  status: string;
+  created_at: Date;
+  updated_at: Date;
+  is_deleted: boolean;
+  phases?: ManualInvoicePhase[];
+}
+
+export interface ManualInvoicePhase {
+  id: number;
+  invoice_id: number;
+  phase_number: number;
+  remarks: string | null;
+  price: number | null;
+  start_date: Date | null;
+  end_date: Date | null;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface Holiday {
+  id: number;
+  name: string;
+  type: string;
+  date: Date;
+  created_at: Date;
+  updated_at: Date;
+  is_deleted: boolean;
+}
+
+export interface SystemPreference {
+  id: number;
+  timezone: string;
+  date_format: string;
+  time_format: string;
+  created_at: Date;
+  updated_at: Date;
+}
 export type projectStatus = [
   "pending",
   "in progress",

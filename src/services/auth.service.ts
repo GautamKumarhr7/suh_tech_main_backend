@@ -27,7 +27,7 @@ export class AuthService {
     // Check if account is active
     if (user.is_deleted || !user.active) {
       throw new Error(
-        "Account is inactive or has been deleted. Please contact administrator."
+        "Account is inactive or has been deleted. Please contact administrator.",
       );
     }
 
@@ -52,7 +52,7 @@ export class AuthService {
       jwtSecret,
       {
         expiresIn: "7d", // Token expires in 7 days
-      }
+      },
     );
 
     // Return user info and token
@@ -101,7 +101,7 @@ export class AuthService {
   async changePassword(
     userId: number,
     currentPassword: string,
-    newPassword: string
+    newPassword: string,
   ) {
     if (!currentPassword || !newPassword) {
       throw new Error("Current password and new password are required");
@@ -121,7 +121,7 @@ export class AuthService {
     // Verify current password
     const isPasswordValid = await bcrypt.compare(
       currentPassword,
-      user.password
+      user.password,
     );
 
     if (!isPasswordValid) {
@@ -135,6 +135,17 @@ export class AuthService {
     await userRepository.updatePassword(userId, hashedPassword);
 
     return { success: true };
+  }
+
+  /**
+   * Reset password (authenticated user)
+   */
+  async resetPassword(
+    userId: number,
+    currentPassword: string,
+    newPassword: string,
+  ) {
+    return this.changePassword(userId, currentPassword, newPassword);
   }
 }
 

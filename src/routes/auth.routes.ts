@@ -20,7 +20,7 @@ router.post("/login", (req, res) => authController.login(req, res));
  * Get current authenticated user info
  */
 router.get("/me", authenticate, (req, res) =>
-  authController.getCurrentUser(req, res)
+  authController.getCurrentUser(req, res),
 );
 
 /**
@@ -28,7 +28,15 @@ router.get("/me", authenticate, (req, res) =>
  * Change user password
  */
 router.post("/change-password", authenticate, (req, res) =>
-  authController.changePassword(req, res)
+  authController.changePassword(req, res),
+);
+
+/**
+ * POST /api/auth/reset-password
+ * Reset user password
+ */
+router.post("/reset-password", authenticate, (req, res) =>
+  authController.resetPassword(req, res),
 );
 
 /**
@@ -36,7 +44,7 @@ router.post("/change-password", authenticate, (req, res) =>
  * Logout user
  */
 router.post("/logout", authenticate, (req, res) =>
-  authController.logout(req, res)
+  authController.logout(req, res),
 );
 
 export default router;

@@ -80,6 +80,94 @@ export const projects = pgTable("projects", {
   isDeleted: boolean("is_deleted").default(false).notNull(),
 });
 
+// Jobs table
+export const jobs = pgTable("jobs", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  type: varchar("type", { length: 100 }).notNull(),
+  location: varchar("location", { length: 255 }).notNull(),
+  description: text("description"),
+  responsibilities: text("responsibilities"),
+  requirements: text("requirements"),
+  active: boolean("active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  isDeleted: boolean("is_deleted").default(false).notNull(),
+});
+
+// Blogs table
+export const blogs = pgTable("blogs", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  excerpt: text("excerpt"),
+  content: text("content").notNull(),
+  imageUrl: text("image_url"),
+  category: varchar("category", { length: 120 }),
+  tags: text("tags"),
+  published: boolean("published").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  isDeleted: boolean("is_deleted").default(false).notNull(),
+});
+
+// Holidays table
+export const holidays = pgTable("holidays", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  type: varchar("type", { length: 100 }).notNull(),
+  date: date("date").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  isDeleted: boolean("is_deleted").default(false).notNull(),
+});
+
+// System Preferences table
+export const systemPreferences = pgTable("system_preferences", {
+  id: serial("id").primaryKey(),
+  timezone: varchar("timezone", { length: 120 }).default("UTC").notNull(),
+  dateFormat: varchar("date_format", { length: 50 })
+    .default("YYYY-MM-DD")
+    .notNull(),
+  timeFormat: varchar("time_format", { length: 50 }).default("24h").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Manual Invoices table
+export const manualInvoices = pgTable("manual_invoices", {
+  id: serial("id").primaryKey(),
+  clientName: varchar("client_name", { length: 255 }).notNull(),
+  clientEmail: varchar("client_email", { length: 255 }),
+  contactPhone: varchar("contact_phone", { length: 30 }),
+  address: text("address"),
+  serviceDescription: text("service_description").notNull(),
+  phaseWork: text("phase_work"),
+  serviceType: varchar("service_type", { length: 120 }).notNull(),
+  serviceCategory: varchar("service_category", { length: 120 }).notNull(),
+  taxRate: decimal("tax_rate", { precision: 5, scale: 2 }),
+  discount: decimal("discount", { precision: 15, scale: 2 }),
+  maintenanceDueDate: date("maintenance_due_date"),
+  status: varchar("status", { length: 60 }).default("draft").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  isDeleted: boolean("is_deleted").default(false).notNull(),
+});
+
+export const manualInvoicePhases = pgTable("manual_invoice_phases", {
+  id: serial("id").primaryKey(),
+  invoiceId: integer("invoice_id")
+    .references(() => manualInvoices.id, { onDelete: "cascade" })
+    .notNull(),
+  phaseNumber: integer("phase_number").notNull(),
+  remarks: text("remarks"),
+  price: decimal("price", { precision: 15, scale: 2 }),
+  startDate: date("start_date"),
+  endDate: date("end_date"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Organizations table
 export const organizations = pgTable("organizations", {
   id: serial("id").primaryKey(),
