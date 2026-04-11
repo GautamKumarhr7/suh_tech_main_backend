@@ -59,7 +59,7 @@ export class UserService {
     if (!emailRegex.test(userData.email)) {
       throw new Error("Invalid email format");
     }
-    const password=userData.firstName.toLowerCase()+"@123"
+    const password = userData.firstName;
 
     // Validate empType if provided
     const validEmpTypes = ["full-time", "part-time", "contract", "intern"];

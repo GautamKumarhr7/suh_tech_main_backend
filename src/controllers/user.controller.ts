@@ -183,7 +183,7 @@ export class UserController {
         empType: req.body.empType,
       };
 
-      const isAdmin = req.user!.admin;
+      const isAdmin = !!req.user!.admin;
       const user = await userService.updateUser(userId, updateData, isAdmin);
 
       res.json({

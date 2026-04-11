@@ -11,7 +11,7 @@ export class OrganizationRepository {
    */
   async findById(id: number) {
     const result = await pool.query(
-      `SELECT id, name, address, email, phone, purchase_plain, modules,
+      `SELECT id, name, address, email, phone, password, purchase_plain, modules,
               status, login_status, created_by, created_at, updated_at
        FROM organizations 
        WHERE id = $1 AND is_deleted = false`,
@@ -56,7 +56,7 @@ export class OrganizationRepository {
    */
   async findByEmail(email: string) {
     const result = await pool.query(
-      `SELECT id, name, email FROM organizations 
+      `SELECT id, name, email, password, login_status FROM organizations 
        WHERE email = $1 AND is_deleted = false`,
       [email.toLowerCase().trim()]
     );

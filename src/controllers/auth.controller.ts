@@ -72,7 +72,10 @@ export class AuthController {
         });
       }
 
-      const user = await authService.getCurrentUser(req.user.id);
+      const user = await authService.getCurrentUser(
+        req.user.id,
+        req.user.isOrganization,
+      );
 
       res.json({
         success: true,
@@ -107,6 +110,7 @@ export class AuthController {
         req.user!.id,
         currentPassword,
         newPassword,
+        req.user!.isOrganization,
       );
 
       res.json({
@@ -154,6 +158,7 @@ export class AuthController {
         req.user!.id,
         currentPassword,
         newPassword,
+        req.user!.isOrganization,
       );
 
       res.json({

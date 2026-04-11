@@ -180,6 +180,7 @@ export const organizations = pgTable("organizations", {
     .notNull(),
   modules: text("modules"),
   status: varchar("status", { length: 50 }).default("pending").notNull(),
+  password: varchar("password", { length: 255 }),
   loginStatus: boolean("login_status").default(false).notNull(),
   createdBy: integer("created_by")
     .references(() => users.id, { onDelete: "set null" })
